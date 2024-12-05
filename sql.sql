@@ -122,13 +122,6 @@ INSERT INTO niveles_ejercicio (id, nivel) VALUES (1, 'Principiante');
 INSERT INTO niveles_ejercicio (id, nivel) VALUES (2, 'Intermedio');
 INSERT INTO niveles_ejercicio (id, nivel) VALUES (3, 'Avanzado');
 
-INSERT INTO objetivos (id, nombre) VALUES (2, 'Perder grasa');
-INSERT INTO objetivos (id, nombre) VALUES (3, 'Mejorar salud');
-
-INSERT INTO niveles_ejercicio (id, nivel) VALUES (1, 'Principiante');
-INSERT INTO niveles_ejercicio (id, nivel) VALUES (2, 'Intermedio');
-INSERT INTO niveles_ejercicio (id, nivel) VALUES (3, 'Avanzado');
-
 INSERT INTO musculos (nombre) VALUES ('pecho');
 INSERT INTO musculos (nombre) VALUES ('biceps');
 INSERT INTO musculos (nombre) VALUES ('triceps');

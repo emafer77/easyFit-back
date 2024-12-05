@@ -6,7 +6,7 @@ class ExerciseConnection:
                 dbname='easyfitpg', 
                 user='emafer77', 
                 password='Maniola777', 
-                host='postgres', 
+                host='localhost', 
                 port='5432'
             )
         except psycopg.OperationalError as err:
