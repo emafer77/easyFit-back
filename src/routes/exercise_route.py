@@ -5,14 +5,14 @@ from src.models.connectionExercise_model import ExerciseConnection
 exercise_router = APIRouter()
 conn = ExerciseConnection()
 
-@exercise_router.post("/insert", tags=["Exercises"])
+@exercise_router.post("/", tags=["Exercises"])
 def insert_exercise(exercise_data: Exercise_Schema):
 
-    data_tuple = (
-        exercise_data.muscle,
-        exercise_data.category,
+    data_tuple = ( 
         exercise_data.name,
         exercise_data.description,
+        exercise_data.muscle,
+        exercise_data.category,
         exercise_data.videoUrl,
         exercise_data.imageUrl
     )
@@ -30,10 +30,10 @@ def get_exercises():
         for data in conn.read_all():
             dictionary = {
                 "id": data[0],
-                "id_musculo": data[1],
-                "id_categoria": data[2],
-                "nombre": data[3],
-                "descripcion": data[4],
+                "name": data[1],
+                "description": data[2],
+                "muscle": data[3],
+                "category": data[4],
                 "videoUrl": data[5],
                 "imageUrl": data[6]
             }
@@ -65,9 +65,10 @@ def delete_exercise(id: int):
 @exercise_router.put("/{id}", tags=["Exercises"])
 def update_exercise(id: int, exercise_data: Exercise_Schema):
     data = (
-        exercise_data.muscle,        
-        exercise_data.category,      
-        exercise_data.name,         
+        exercise_data.name,        
+        exercise_data.description,
+        exercise_data.muscle,      
+        exercise_data.category,         
         id,                          
         exercise_data.videoUrl,      
         exercise_data.imageUrl       

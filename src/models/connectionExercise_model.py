@@ -31,7 +31,7 @@ class ExerciseConnection:
     def write(self, data):
         """Método para insertar un ejercicio con video e imagen"""
         query = """
-            INSERT INTO ejercicios (id_musculo, id_categoria, nombre, descripcion)
+            INSERT INTO ejercicios ( nombre, descripcion,id_musculo, id_categoria)
             VALUES (%s, %s, %s, %s) RETURNING id
         """
         
@@ -51,23 +51,27 @@ class ExerciseConnection:
         self.execute_query(image_query, (exercise_id, data[5]))
         
         return exercise_id
-    
     def read_all(self):
         """Método para obtener todos los ejercicios"""
         query = """
-            SELECT e.id, e.id_musculo, e.id_categoria, e.nombre, e.descripcion, ev.video_url, ei.image_url
-            FROM ejercicios e
-            LEFT JOIN ejercicio_videos ev ON e.id = ev.ejercicio_id
-            LEFT JOIN ejercicio_imagenes ei ON e.id = ei.ejercicio_id
-        """
-        return self.execute_query(query, fetch=True)
-    
-    def read_one(self, exercise_id: int):
-        query = """
-        SELECT e.id, e.id_musculo, e.id_categoria, e.nombre, e.descripcion, ev.video_url, ei.image_url
+        SELECT e.id, e.nombre, e.descripcion, em.nombre AS muscle,ce.nombre AS category,  ev.video_url, ei.image_url
         FROM ejercicios e
         LEFT JOIN ejercicio_videos ev ON e.id = ev.ejercicio_id
         LEFT JOIN ejercicio_imagenes ei ON e.id = ei.ejercicio_id
+        LEFT JOIN categorias_ejercicios ce ON e.id_categoria = ce.id
+        LEFT JOIN musculos em ON e.id_musculo = em.id
+        """
+        return self.execute_query(query, fetch=True)
+
+    
+    def read_one(self, exercise_id: int):
+        query = """
+        SELECT e.id,e.nombre,e.descripcion,em.nombre AS muscle,ce.nombre AS category, ev.video_url, ei.image_url
+        FROM ejercicios e
+        LEFT JOIN ejercicio_videos ev ON e.id = ev.ejercicio_id
+        LEFT JOIN ejercicio_imagenes ei ON e.id = ei.ejercicio_id
+        LEFT JOIN categorias_ejercicios ce ON e.id_categoria = ce.id
+        LEFT JOIN musculos em ON e.id_musculo = em.id
         WHERE e.id = %s
     """
         result = self.execute_query(query, (exercise_id,), fetch=True)
@@ -75,10 +79,10 @@ class ExerciseConnection:
             return None  
         return {
         "id": result[0][0],
-        "id_musculo": result[0][1],
-        "id_categoria": result[0][2],
-        "nombre": result[0][3],
-        "descripcion": result[0][4],
+        "name": result[0][1],
+        "descripcion": result[0][2],
+        "muscle": result[0][3],
+        "category": result[0][4],
         "videoUrl": result[0][5],
         "imageUrl": result[0][6]
     }
@@ -98,7 +102,7 @@ class ExerciseConnection:
     def update(self, data):
         query = """
         UPDATE ejercicios
-        SET id_musculo = %s, id_categoria = %s, nombre = %s, descripcion = %s
+        SET nombre = %s, descripcion = %s, id_musculo = %s, id_categoria = %s 
         WHERE id = %s
         """
         self.execute_query(query, data[:5])
